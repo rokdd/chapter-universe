@@ -1,4 +1,4 @@
-### Reasons for chapter-ridge
+### Reasons for chapter universe
 
 This script takes the favorites menu of [mpc-be](https://sourceforge.net/projects/mpcbe/) Videoplayer as a Editor (or source) for writing the chapters to the mp4 files.
 
@@ -11,6 +11,7 @@ The Benefits:
 - careful mode: Decide each file whether to process and afterwards whether to apply changes
 - tolerance of one second to avoid duplicates / autoinit a starting chapter
 - the data is available as excel file so you could import / reuse it
+- clean chapter titles without filename
 ### Install
 
 - ffmpeg and ffprobe https://ffmpeg.org/download.html#build-windows
@@ -21,7 +22,7 @@ The Benefits:
 
 ### TODO / limitations
 - find the ffmpeg path better
-- commandline parameters
+- commandline parameters (and silent mode)
 - make it available not only for windows (where to read favs from?)
 - option for mapping paths
 - chapters for PotPlayer

@@ -3,6 +3,8 @@ import itertools
 #import pandas
 import configparser
 import re
+
+import numpy
 import pandas as pd
 from collections import OrderedDict
 
@@ -28,9 +30,9 @@ class chapter_handler:
             self.files = pd.read_excel('data.xlsx', index_col=0)
 
         self.files = self.files.reindex(self.files.columns.union(self.cols, sort=False), axis=1, fill_value=0)
-        self.files['indexed']=self.files['indexed'].astype(str)
-        self.files['runned'] = self.files['runned'].astype(str)
-        self.files['applied'] = self.files['applied'].astype(str)
+        self.files['indexed']=pd.to_datetime(self.files['indexed'].replace('0',numpy.NaN))
+        self.files['runned'] = pd.to_datetime(self.files['runned'].replace('0',numpy.NaN))
+        self.files['applied'] = pd.to_datetime(self.files['applied'].replace('0',numpy.NaN))
         for handler in self.handler_load_filelist:
             self.files=handler.load_filelist(self.files)
 
@@ -38,13 +40,17 @@ class chapter_handler:
 
 
     def apply_filelist(self):
-
+        bool_status=None
         for filepath, entries in self.files.sort_values('runned').groupby('dest_file',sort=False):
+            if bool_status!=None and CAREFUL:
+                if not yes_or_no('continue with file '+filepath+""):
+                    break
             lg.debug("Apply "+filepath+" with following chapters "+format_df(entries))
 
             # check whether the file exists else skip
             if not os.path.exists(filepath):
                 lg.error('The following path is not readable: '+filepath)
+                bool_status = False
                 continue
             for handler in self.handler_save_file:
                 bool_status,status=handler.save_file(filepath,entries,skip_apply=False)
@@ -58,9 +64,7 @@ class chapter_handler:
                             self.files.at[i,"applied"] = time_index
 
             self.save()
-            if CAREFUL:
-                if not yes_or_no('continue to next file'):
-                    break
+
 
 
     def close(self):
@@ -69,7 +73,9 @@ class chapter_handler:
 
     def save(self):
         # save the files
-        self.files.to_excel('data.xlsx')
+
+        with pd.ExcelWriter('data.xlsx',mode="w",engine="openpyxl") as writer:
+            self.files.to_excel(writer)
 
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':

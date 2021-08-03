@@ -101,8 +101,12 @@ class chapter_of_mpcbe:
         for section in Config.sections():
             if section.startswith('CHAPTER'):
                 chapters=chapters.append({**{'section':section},**{x.lower():Config.get(section, x) for x in ['TIMEBASE','START','END','title']}},ignore_index=True)
-                #remove the section to write it later
-                #Config.remove_section(section)
+                #remove the section later
+
+                #update the timebase, so that the timebase is consistent over the whole file
+                if Config.get(section, "TIMEBASE"):
+                    time_base = int(Config.get(section, "TIMEBASE").split('/')[1])
+                    lg.debug("Found timebase in existing chapter.. we use now: "+Config.get(section, "TIMEBASE"))
 
         if chapters.shape[0]==0:
             # add the first chapter
@@ -122,6 +126,7 @@ class chapter_of_mpcbe:
                 lg.info('The chapter "' + entry['title'] + '" was removed in favs for ' + entry[
                     'dest_file'] + '. The chapter will be deleted in a future release.')
                 status[n] = "REMOVED"
+                chapters=chapters.drop(n)
                 continue
 
             #tolerance is 1sek before and after to avoid duplicates
@@ -141,7 +146,9 @@ class chapter_of_mpcbe:
         if status=={}:
             lg.info("There is nothing to apply to file. We will not bother the file and return")
             return None,status
-        # clean some 
+        # clean some chapter titles
+        chapters['title']=chapters['title'].apply(lambda x: x if (x not in TITLES_NOT_TIDY+[os.path.basename(filepath)]) else "")
+
         #now we sort by start ascending
         chapters.sort_values(by=['start'],key=lambda col: pd.to_numeric(col),inplace=True)
         #mapping start and end correctly

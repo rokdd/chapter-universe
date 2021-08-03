@@ -6,6 +6,9 @@ BACKUP=True
 #asks after and before each chapter to continue or not
 CAREFUL=True
 
+#list of titles which will be set empty if they match (the filename as a chapter name gets always replaced!)
+TITLES_NOT_TIDY=["Start","Ende","End"]
+
 import datetime as dt
 time_index=dt.datetime.now()
 
