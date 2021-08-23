@@ -12,6 +12,7 @@ The Benefits:
 - tolerance of one second to avoid duplicates / autoinit a starting chapter
 - the data is available as excel file so you could import / reuse it
 - clean chapter titles without filename
+
 ### Install
 
 - ffmpeg and ffprobe https://ffmpeg.org/download.html#build-windows
@@ -37,3 +38,8 @@ The Benefits:
 
 - https://github.com/cbitterfield/chaptermarkers/blob/main/chaptermarkers/chaptermarkers.py
 - https://ikyle.me/blog/2020/add-mp4-chapters-ffmpeg
+
+## Examples
+
+Example of chapters in VLC / Android:
+![](Android-VLC-Screenshot.png)

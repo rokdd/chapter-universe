@@ -77,7 +77,7 @@ class chapter_handler:
         with pd.ExcelWriter('data.xlsx',mode="w",engine="openpyxl") as writer:
             self.files.to_excel(writer)
 
-# Press the green button in the gutter to run the script.
+
 if __name__ == '__main__':
     lg.debug('Chapter ridge starts..')
     chapters=chapter_handler()
