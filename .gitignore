@@ -3,3 +3,7 @@
 *.pyc
 __pycache__/mpcbe.cpython-38.pyc
 *.pyc
+/build/
+/dist/
+/__pycache__/
+*__pycache__/*
